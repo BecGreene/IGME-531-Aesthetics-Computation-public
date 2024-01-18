@@ -63,4 +63,3 @@ Use these primitive components to draw _Interruptions_ as an SVG file. Then, not
 </table>
 
 
-
