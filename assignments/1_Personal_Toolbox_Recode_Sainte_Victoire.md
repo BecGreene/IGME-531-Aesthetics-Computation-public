@@ -1,8 +1,8 @@
-# Personal Toolbox - Recode _Interruptions_
+# Personal Toolbox - Recode _Sainte-Victoire en Rouge_
 
 In this series of assignments, you will be building your own library for drawing with SVG. This first assignment focuses on implementing software components for drawing primitive shapes and basic lines.
 
-Your goal in this assignment is to write a program that generates an SVG file. This file should (to some reasonable degree) replicate [_Interruptions_ (1968-1969)](https://dam.org/museum/artists_ui/artists/molnar-vera/interruptions/) by Vera Molnár.
+Your goal in this assignment is to write a program that generates an SVG file. This file should (to some reasonable degree) replicate [_Sainte-Victoire en Rouge_](https://www.zigzags.be/blog/2023/1/26/vra-molnar) by Vera Molnár.
 
 To do this, you will need to implement reusable program components that can represent each of these SVG primitives:
 - Circles
@@ -11,7 +11,7 @@ To do this, you will need to implement reusable program components that can repr
 - Polygons
 - Lines
 
-Use these primitive components to draw _Interruptions_ as an SVG file. Then, notice that _Interruptions_ is just a bunch of lines; use your line component to replicate the original, then use your other conponents to create one or more variations on the original. 
+Use these primitive components to draw _Sainte-Victoire_ as an SVG file. Then, notice that _Sainte-Victoire_ is just a bunch of squares; use your rect component to replicate the original, then use your other conponents to create one or more variations on the original. 
 
 ## Learning Goals
 - Understand the structure and syntax of SVG files
@@ -19,8 +19,8 @@ Use these primitive components to draw _Interruptions_ as an SVG file. Then, not
 - Begin work on your own library, which you'll use in Project 1.
 
 ## Deliverables
-- An SVG file that replicates _Interruptions_.
-- One or more SVG files that are variations on _Interruptions_.
+- An SVG file that replicates _Sainte-Victoire_.
+- One or more SVG files that are variations on _Sainte-Victoire_.
 - The program that generated the SVG files, containing your primitive components.
     - For each primitive component, it should be possible to specify attributes such as position, size, color, radius, etc.
     - These components should be located together, and be reasonably self-contained and portable.
@@ -37,8 +37,8 @@ Use these primitive components to draw _Interruptions_ as an SVG file. Then, not
     <tr>
         <td>A</td>
         <td>
-            <li>Your recreation of <em>Interruptions</em> is accurate and thoughtfully done.</li>
-            <li>Your variations on <em>Interruptions</em> are interesting and demonstrate creative risk-taking.</li>
+            <li>Your recreation is accurate and thoughtfully done.</li>
+            <li>Your variations on <em>Sainte-Victoire</em> are interesting and demonstrate creative risk-taking.</li>
             <li>Your primitive components do their job and are used to create the artwork.</li>
             <li>Your readme is clear and sufficient.</li>
         </td>
