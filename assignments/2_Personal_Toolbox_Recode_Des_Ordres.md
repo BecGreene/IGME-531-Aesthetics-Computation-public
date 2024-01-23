@@ -2,7 +2,8 @@
 
 # Personal Toolbox - Recode _(Des)Ordres_
 
-<img src="assets/des_ordres.webp" width="100%" height="150px" style="object-fit: cover" >
+<div style="background-image: url('assets/des_ordres.webp'); width: 100%; height: 150px; background-size: cover;">
+</div>
 
 In this series of assignments, you will be building your own library for drawing with SVG. This assignment extends your work on representing primitive components in "Recode _Sainte-Victoire en Rouge_", asking you to now implement representations of paths, polylines, and groups.
 
