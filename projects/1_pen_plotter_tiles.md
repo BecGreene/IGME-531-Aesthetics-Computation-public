@@ -1,4 +1,4 @@
-# Module 1 Project: Generating Artistic Tile Patterns with CNC Technology
+# Project 1: Plotting Tiles
 
 <div align="center">
     <img src="assets/truchet.jpg">
