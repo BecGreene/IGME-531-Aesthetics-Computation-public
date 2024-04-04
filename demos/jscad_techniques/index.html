@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Demo Application</title>
+    <style>
+        body {
+            margin: 0;
+        }
+
+        #render {
+            width: 90vmin;
+            height: 90vmin;
+            margin: auto;
+            outline: 1px solid black;
+            
+        }
+
+        div:has(#render) {
+            width: 100%;
+            height: 100vh;
+            min-height: 100vh;
+            max-height: 100vh;
+            display: flex;
+            justify-content: center;
+        }
+
+        button {         
+            font-size: 1.25em;
+            width: fit-content;
+            height: fit-content;
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <script src="https://unpkg.com/@jscad/modeling" id="MODELING"></script>
+    <script src="https://unpkg.com/@jscad/regl-renderer"></script>
+    <!-- Borrowed from https://github.com/microsoft/maker.js/blob/ec18acb959fa1b5f3fb0c790f45ffe2f9092c1b0/docs/external/jscad/stl-serializer.js -->
+    <!-- <script src="stl-serializer.js"></script> -->
+
+    <div>
+        <div id="render"></div>
+    </div>
+
+    <script type="module" language="javascript">
+        import { render, downloadSTL } from './render.js';
+        import FastNoiseLite from 'https://unpkg.com/fastnoise-lite@1.1.0/FastNoiseLite.js';
+        
+        import {Turtle} from './turtle.js';
+        // see turtle.js file for example usage
+
+        let noise = new FastNoiseLite(0);
+        noise.SetNoiseType(FastNoiseLite.NoiseType.OpenSimplex2);
+        noise.SetFrequency(2.11);
+
+        const { booleans, colors, primitives, transforms } = jscadModeling // modeling comes from the included MODELING library
+        const { translate } = transforms;
+
+        const { intersect, subtract, union } = booleans
+        const { colorize, colorNameToRgb } = colors
+        const { cube, cuboid, sphere } = primitives
+
+        const demo = (parameters) => {
+            let totalHeight = 230;
+            let numSlices = 100;
+            let sliceHeight = totalHeight / numSlices;
+            let segments = 64;
+            let noiseZoom = 100;
+            let r = (z) => 100 * (totalHeight - z) / totalHeight + 3;
+            let perturbMagnitude = (z) => 10 * (totalHeight - z) / totalHeight;
+
+            let slices = [];
+            for (let sliceI = 0; sliceI < numSlices; sliceI++) {
+                let z = sliceI * sliceHeight;
+
+                const circle = primitives.circle({
+                    segments: segments,
+                    radius: r(z)
+                });
+                
+                const circlePoints = jscadModeling.geometries.geom2.toOutlines(circle)[0];
+
+                const perturbedPoints = circlePoints.map((point) => {
+                    const amount = perturbMagnitude(z) * noise.GetNoise(point[0] / noiseZoom, point[1] / noiseZoom, z / noiseZoom);
+
+                    const angle = Math.atan2(point[1], point[0]);
+
+                    const x = point[0] + amount * Math.cos(angle);
+                    const y = point[1] + amount * Math.sin(angle);
+                    return [x, y];
+                });
+
+                const messyCircle = jscadModeling.geometries.geom2.fromPoints(perturbedPoints);
+            
+                const messyDisk = jscadModeling.extrusions.extrudeLinear({
+                    height: 1
+                }, messyCircle);
+
+                const translatedMessyDisk = jscadModeling.transforms.translate(
+                    [0, 0, z], 
+                    messyDisk
+                );
+
+                slices.push(translatedMessyDisk);
+            }
+
+            return jscadModeling.hulls.hullChain(slices);
+        };
+
+        const pathThroughSpace = (pathPoints) => {
+            // use hullChain to create a path through space
+            let spheres = [];
+            for (let i = 0; i < pathPoints.length; i++) {
+                spheres.push(primitives.sphere({
+                    center: pathPoints[i],
+                    radius: 3
+                }));
+            }
+            return jscadModeling.hulls.hullChain(spheres);
+        }
+
+        let model = demo();
+        // let model = pathThroughSpace([
+        //     [0, 0, 0],
+        //     [10, 0, 0],
+        //     [10, 10, 0],
+        //     [10, 10, 10],
+        //     [0, 10, 10],
+        //     [0, 0, 10],
+        //     [0, 0, 20]
+        // ]);
+
+        // check if there's a mode query parameter == download
+        const urlParams = new URLSearchParams(window.location.search);
+        const mode = urlParams.get('mode');
+        if (mode === 'download') {
+            downloadSTL(model, `sierpinski_${order}`);
+        }
+        // if we're not supposed to just download the model, render it
+        if (mode === 'render' || mode !== 'download') {
+            render(document.getElementById("render"), 
+                   model)
+        }
+
+    </script>
+</body>
+
+</html>
+
